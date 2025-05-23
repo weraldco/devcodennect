@@ -11,14 +11,20 @@ import {
 	FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useAuthStore } from '@/store/authStore';
+import { API_PATHS } from '@/utils/apiPaths';
+import axiosInstance from '@/utils/axiosInstance';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC } from 'react';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/dist/server/api-utils';
+import Link from 'next/link';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import TextField from '../Global/TextField';
 
 const formSchema = z.object({
-	emailAddress: z.string().min(2).max(50),
+	email: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
 });
 
@@ -26,17 +32,39 @@ interface Props {}
 
 const SignInForm: FC<Props> = () => {
 	// 1. Define your form.
+	const { user, setUser } = useAuthStore();
+	const [error, setError] = useState('');
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			emailAddress: '',
+			email: '',
 			password: '',
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
-	}
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		setError('');
+		try {
+			const { email, password } = values;
+			const response = await axiosInstance.post(API_PATHS.AUTH.SIGNIN, {
+				email,
+				password,
+			});
+			const { user, token } = response.data;
+
+			if (token) {
+				localStorage.setItem('token', token);
+				// setUser(user);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.data.message) {
+				setError(error.response.data.message);
+			} else {
+				setError('Something went wrong, try again later.');
+			}
+		}
+	};
 	return (
 		<div className="flex flex-col w-full  max-w-md gap-4">
 			<div className="flex flex-col">
@@ -51,7 +79,7 @@ const SignInForm: FC<Props> = () => {
 						placeholder="Enter you email address"
 						label="Email Address"
 						form={form.control}
-						name="emailAddress"
+						name="email"
 						type="email"
 					/>
 					<TextField
@@ -67,6 +95,16 @@ const SignInForm: FC<Props> = () => {
 					</Button>
 				</form>
 			</Form>
+			<span>
+				Not yet registered?{' '}
+				<Link
+					href="/auth/signup"
+					className="text-red-400 hover:opacity-70 duration-200"
+				>
+					Click here
+				</Link>{' '}
+				to sign-up
+			</span>
 		</div>
 	);
 };

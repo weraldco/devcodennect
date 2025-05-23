@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -82,6 +83,16 @@ const SignUpForm: FC<Props> = () => {
 					</Button>
 				</form>
 			</Form>
+			<span>
+				Already registered?{' '}
+				<Link
+					href="/auth/signin"
+					className="text-red-400 hover:opacity-70 duration-200"
+				>
+					Click here
+				</Link>{' '}
+				to sign-in
+			</span>
 		</div>
 	);
 };
