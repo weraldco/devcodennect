@@ -54,12 +54,10 @@ const SignInForm: FC<Props> = () => {
 				email,
 				password,
 			});
-			const { user, token } = response.data;
 
-			if (token) {
-				localStorage.setItem('token', token);
+			if (response.data) {
+				const { user, message } = response.data;
 				setUser(user);
-				console.log('User', user);
 				router.push('/');
 				setLoading(false);
 			}
@@ -73,7 +71,7 @@ const SignInForm: FC<Props> = () => {
 			}
 		}
 	};
-
+	console.log('User', user);
 	return (
 		<div className="flex flex-col w-full  max-w-md gap-4">
 			<div className="flex flex-col">

@@ -1,3 +1,4 @@
+import CheckUser from '@/components/CheckUser';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Lexend, Poppins, Roboto } from 'next/font/google';
 import './globals.css';

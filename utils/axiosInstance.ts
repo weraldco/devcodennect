@@ -1,12 +1,12 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-// import { BASE_URL } from './apiPaths';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASEURL;
 
 const axiosInstance = axios.create({
 	baseURL: BASE_URL,
 	timeout: 20000,
+	withCredentials: true,
 	headers: {
 		'Content-Type': 'application/json',
 		Accept: 'application/json',
@@ -15,15 +15,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
 	(config) => {
-		// Get the token to localStorage
-		const accessToken = localStorage.getItem('token');
-
-		//Check if token is in localStorage if yes assign the token to the header authorization
-		if (accessToken) {
-			config.headers.Authorization = `Bearer ${accessToken}`;
-		}
-
-		// Return the config variable
+		console.log('Outgoing request', config.url);
 		return config;
 	},
 
