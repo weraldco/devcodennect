@@ -10,18 +10,18 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/store/authStore';
 import { API_PATHS } from '@/utils/apiPaths';
 import axiosInstance from '@/utils/axiosInstance';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/dist/server/api-utils';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
 import TextField from '../Global/TextField';
+
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50),
@@ -34,6 +34,8 @@ const SignInForm: FC<Props> = () => {
 	// 1. Define your form.
 	const { user, setUser } = useAuthStore();
 	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
+	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -45,6 +47,7 @@ const SignInForm: FC<Props> = () => {
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		setError('');
+		setLoading(true);
 		try {
 			const { email, password } = values;
 			const response = await axiosInstance.post(API_PATHS.AUTH.SIGNIN, {
@@ -55,16 +58,22 @@ const SignInForm: FC<Props> = () => {
 
 			if (token) {
 				localStorage.setItem('token', token);
-				// setUser(user);
+				setUser(user);
+				console.log('User', user);
+				router.push('/');
+				setLoading(false);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.data.message) {
+				setLoading(false);
 				setError(error.response.data.message);
 			} else {
+				setLoading(false);
 				setError('Something went wrong, try again later.');
 			}
 		}
 	};
+
 	return (
 		<div className="flex flex-col w-full  max-w-md gap-4">
 			<div className="flex flex-col">
@@ -90,8 +99,17 @@ const SignInForm: FC<Props> = () => {
 						type="password"
 					/>
 
-					<Button type="submit" className="w-full py-5">
-						Submit
+					<Button className="cursor-pointer w-full bg-violet-500 hover:bg-violet-400 duration-200 active:bg-violet-600 py-6">
+						{!loading ? (
+							'LOGIN'
+						) : (
+							<div className=" px-4 py-2 flex gap-2 items-center">
+								<div className="animate-spin">
+									<AiOutlineLoading3Quarters />
+								</div>
+								<span>Processing..</span>
+							</div>
+						)}
 					</Button>
 				</form>
 			</Form>
@@ -99,12 +117,13 @@ const SignInForm: FC<Props> = () => {
 				Not yet registered?{' '}
 				<Link
 					href="/auth/signup"
-					className="text-red-400 hover:opacity-70 duration-200"
+					className="text-teal-400 hover:opacity-70 duration-200"
 				>
 					Click here
 				</Link>{' '}
 				to sign-up
 			</span>
+			{error && <span className="text-red-400">{error}</span>}
 		</div>
 	);
 };
