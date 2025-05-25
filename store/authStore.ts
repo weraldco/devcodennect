@@ -7,6 +7,7 @@ type AuthStoreType = {
 	user: UserType | null;
 	setUser: (user: UserType | null) => Promise<void>;
 	fetchUserData: () => Promise<null | void>;
+	clearUser: () => Promise<void>;
 };
 
 export const useAuthStore = create<AuthStoreType>((set, get) => ({
@@ -25,5 +26,8 @@ export const useAuthStore = create<AuthStoreType>((set, get) => ({
 		if (response.data.user) {
 			set({ user: response.data.user });
 		}
+	},
+	clearUser: async () => {
+		set({ user: null });
 	},
 }));
