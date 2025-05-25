@@ -1,16 +1,10 @@
-'use client';
-import { useAuthStore } from '@/store/authStore';
-import { useEffect } from 'react';
+'use server';
 
-export default function Home() {
-	const { user, fetchUserData } = useAuthStore();
-	useEffect(() => {
-		fetchUserData();
-	}, []);
-	console.log('user', user);
-
-	if (!user) return <div>Loading...</div>;
+export default async function Home() {
+	// const session = await auth();
 	return (
-		<div className=" w-full flex items-center justify-center">Dashboard </div>
+		<div className=" w-full flex items-center justify-center">
+			{/* <Test session={session} /> */}Dashboard
+		</div>
 	);
 }

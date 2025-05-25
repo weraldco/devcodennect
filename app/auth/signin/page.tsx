@@ -1,9 +1,6 @@
 import SignInForm from '@/components/Auth/SignInForm';
-import { FC } from 'react';
 
-interface Props {}
-
-const page: FC<Props> = () => {
+const page = () => {
 	return <SignInForm />;
 };
 

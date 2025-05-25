@@ -2,11 +2,15 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-export function middleware(request: NextRequest) {
-	const token = request.cookies.get('token')?.value;
+export async function middleware(request: NextRequest) {
+	const token =
+		request.cookies.get('token')?.value ||
+		request.cookies.get('authjs.session-token')?.value;
 	const { pathname } = request.nextUrl;
+
+	// const testToken = await getToken({ req, secret: process.env.AUTH_SECRET });
 	// Protect routes that start with /dashboard
-	const publicPath = ['/auth/signin', '/auth/signup'];
+	const publicPath = ['/auth/signin', '/auth/signup', '/test'];
 
 	const isPublicPath = publicPath.includes(pathname);
 

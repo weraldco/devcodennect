@@ -1,19 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import TextField from '../Global/TextField';
@@ -25,9 +15,7 @@ const formSchema = z.object({
 	repeatPassword: z.string().min(2).max(50),
 });
 
-interface Props {}
-
-const SignUpForm: FC<Props> = () => {
+const SignUpForm = () => {
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),

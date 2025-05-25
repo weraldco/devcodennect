@@ -22,7 +22,8 @@ export const useAuthStore = create<AuthStoreType>((set, get) => ({
 	},
 	fetchUserData: async () => {
 		const response = await axiosInstance.get(API_PATHS.AUTH.GETUSERINFO);
-		if (!response) return null;
-		set({ user: response.data });
+		if (response) {
+			set({ user: response.data });
+		}
 	},
 }));

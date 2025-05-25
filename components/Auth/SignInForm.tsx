@@ -1,42 +1,30 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { useAuthStore } from '@/store/authStore';
 import { API_PATHS } from '@/utils/apiPaths';
 import axiosInstance from '@/utils/axiosInstance';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { FC, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
 import TextField from '../Global/TextField';
-
-import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
 });
 
-interface Props {}
-
-const SignInForm: FC<Props> = () => {
+const SignInForm = () => {
 	// 1. Define your form.
 	const { user, setUser } = useAuthStore();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
-
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -56,7 +44,7 @@ const SignInForm: FC<Props> = () => {
 			});
 
 			if (response.data) {
-				const { user, message } = response.data;
+				const { user } = response.data;
 				setUser(user);
 				router.push('/');
 				setLoading(false);
