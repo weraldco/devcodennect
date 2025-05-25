@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Control, FieldValues, Path } from 'react-hook-form';
 import {
 	FormControl,
 	FormDescription,
@@ -9,26 +9,26 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 
-interface Props {
-	form: any;
+interface Props<T extends FieldValues> {
+	form: Control<T>;
 	label: string;
 	placeholder: string;
 	description?: string;
 	type: string;
-	name: string;
+	name: Path<T>;
 }
 
-const TextField: FC<Props> = ({
+const TextField = <T extends FieldValues>({
 	form,
 	placeholder,
 	label,
 	description,
 	type,
 	name,
-}) => {
+}: Props<T>) => {
 	return (
 		<FormField
-			control={form.control}
+			control={form}
 			name={name}
 			render={({ field }) => (
 				<FormItem>

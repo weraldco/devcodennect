@@ -4,6 +4,7 @@ export const API_PATHS = {
 	AUTH: {
 		SIGNIN: `${API_ROOT}/auth/signin`,
 		SIGNUP: `${API_ROOT}/auth/signup`,
+		SIGNOUT: `${API_ROOT}/auth/signout`,
 		GETUSERINFO: `${API_ROOT}/auth/getUser`,
 	},
 };

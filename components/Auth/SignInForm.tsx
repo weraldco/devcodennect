@@ -18,6 +18,7 @@ const formSchema = z.object({
 	email: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
 });
+export type FormValues = z.infer<typeof formSchema>;
 
 const SignInForm = () => {
 	// 1. Define your form.
@@ -25,6 +26,7 @@ const SignInForm = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -59,7 +61,6 @@ const SignInForm = () => {
 			}
 		}
 	};
-	console.log('User', user);
 	return (
 		<div className="flex flex-col w-full  max-w-md gap-4">
 			<div className="flex flex-col">
