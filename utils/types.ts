@@ -19,7 +19,7 @@ export type JobType = {
 };
 
 export type SkillType = {
-	id: number;
+	id: string;
 	skillName: string;
 };
 

@@ -1,28 +1,26 @@
 'use client';
 
+import TextField from '@/components/Global/TextField';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { useAuthStore } from '@/store/authStore';
+import { toast } from 'sonner';
+
 import { API_PATHS } from '@/utils/apiPaths';
 import axiosInstance from '@/utils/axiosInstance';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
-import TextField from '../Global/TextField';
 
 const formSchema = z.object({
-	email: z.string().min(2).max(50),
-	password: z.string().min(2).max(50),
+	// id: z.string().min(2).max(50),
+	skillName: z.string().min(2).max(50),
 });
 export type FormValues = z.infer<typeof formSchema>;
 
-const SignInForm = () => {
-	// 1. Define your form.
-	const { user, setUser } = useAuthStore();
+const AddNewSkill = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
@@ -30,8 +28,7 @@ const SignInForm = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: '',
-			password: '',
+			skillName: '',
 		},
 	});
 
@@ -39,17 +36,15 @@ const SignInForm = () => {
 		setError('');
 		setLoading(true);
 		try {
-			const { email, password } = values;
-			const response = await axiosInstance.post(API_PATHS.AUTH.SIGNIN, {
-				email,
-				password,
+			const { skillName } = values;
+			const response = await axiosInstance.post(API_PATHS.AUTH.ADDNEWSKILL, {
+				id: skillName.toLowerCase().replaceAll(' ', '-'),
+				skillName,
 			});
-
 			if (response.data) {
-				const { user } = response.data;
-				setUser(user);
-				router.push('/');
+				toast(response.data.message);
 				setLoading(false);
+				form.reset();
 			}
 		} catch (error: any) {
 			if (error.response && error.response.data.message) {
@@ -64,31 +59,22 @@ const SignInForm = () => {
 	return (
 		<div className="flex flex-col w-full  max-w-md gap-4">
 			<div className="flex flex-col">
-				<span className="text-2xl">Welcome back</span>
-				<span className="text-sm">
-					To access your dashboard, you need to sign-in
-				</span>
+				<span className="text-xl">Add New Skill</span>
+				<span className="text-sm">Add your new skill in the database?</span>
 			</div>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 					<TextField
-						placeholder="Enter you email address"
-						label="Email Address"
+						placeholder="Enter skill name. eg. Javascript"
+						label="Skill Name"
 						form={form.control}
-						name="email"
-						type="email"
-					/>
-					<TextField
-						placeholder="Enter you email password"
-						label="Password"
-						form={form.control}
-						name="password"
-						type="password"
+						name="skillName"
+						type="text"
 					/>
 
-					<Button className="cursor-pointer w-full bg-neutral-700 hover:bg-neutral-600 duration-200 active:bg-neutral-700/70 py-6">
+					<Button className="cursor-pointer w-full bg-violet-500 hover:bg-violet-400 duration-200 active:bg-violet-600 py-6">
 						{!loading ? (
-							'LOGIN'
+							'ADD SKILL'
 						) : (
 							<div className=" px-4 py-2 flex gap-2 items-center">
 								<div className="animate-spin">
@@ -100,19 +86,10 @@ const SignInForm = () => {
 					</Button>
 				</form>
 			</Form>
-			<span>
-				Not yet registered?{' '}
-				<Link
-					href="/auth/signup"
-					className="text-teal-400 hover:opacity-70 duration-200"
-				>
-					Click here
-				</Link>{' '}
-				to sign-up
-			</span>
+
 			{error && <span className="text-red-400">{error}</span>}
 		</div>
 	);
 };
 
-export default SignInForm;
+export default AddNewSkill;
