@@ -6,6 +6,7 @@
 @theme inline {
 	--font-poppins: var(--font-poppins), sans-serif;
 	--font-roboto: var(--font-roboto), sans-serif;
+	--font-montserrat: var(--font-montserrat), sans-serif;
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--font-sans: var(--font-geist-sans);

@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
+import Logo from '../Global/Logo';
 import TextField from '../Global/TextField';
 
 const formSchema = z.object({
@@ -63,6 +64,7 @@ const SignInForm = () => {
 	};
 	return (
 		<div className="flex flex-col w-full  max-w-md gap-4">
+			<Logo className="text-4xl  text-center py-5" />
 			<div className="flex flex-col">
 				<span className="text-2xl">Welcome back</span>
 				<span className="text-sm">

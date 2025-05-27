@@ -17,7 +17,7 @@ const DevelopersProfile: FC<Props> = () => {
 			<Navbar />
 
 			<div className=" flex h-screen w-full items-center justify-center ">
-				<div className="w-full h-screen flex items-center justify-center ">
+				<div className="w-full h-screen flex  justify-center ">
 					{!user ? (
 						<LoadingState label="Profile Information.." />
 					) : (

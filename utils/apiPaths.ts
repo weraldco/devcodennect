@@ -9,4 +9,7 @@ export const API_PATHS = {
 		ADDNEWSKILL: `${API_ROOT}/auth/addSkill`,
 		GETSKILLS: `${API_ROOT}/auth/getSkills`,
 	},
+	USER: {
+		GETUSER: (userId: number) => `${API_ROOT}/user/getUser/${userId}`,
+	},
 };

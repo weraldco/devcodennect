@@ -1,12 +1,14 @@
 import { FC } from 'react';
 
-interface Props {}
+interface Props {
+	className?: String;
+}
 
-const Logo: FC<Props> = () => {
+const Logo: FC<Props> = ({ className }) => {
 	return (
-		<div>
-			<span className="">dev</span>
-			<span>Codennect</span>
+		<div className={`${className} `}>
+			<span className="font-montserrat font-bold text-teal-700">dev</span>
+			<span className="text-teal-600">codennect</span>
 		</div>
 	);
 };

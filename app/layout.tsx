@@ -1,7 +1,13 @@
 import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
-import { Poppins, Roboto } from 'next/font/google';
+import { Montserrat, Poppins, Roboto } from 'next/font/google';
 import './globals.css';
+
+const montserratFont = Montserrat({
+	variable: '--font-montserrat',
+	weight: ['400', '500', '600', '800'],
+	subsets: ['latin'],
+});
 
 const robotoFont = Roboto({
 	variable: '--font-roboto',
@@ -26,7 +32,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${robotoFont.variable} ${poppinsFont.variable} antialiased font-roboto`}
+				className={`${montserratFont.variable} ${robotoFont.variable} ${poppinsFont.variable} antialiased font-roboto`}
 			>
 				<div className=" w-full flex items-center justify-center ">
 					{children}

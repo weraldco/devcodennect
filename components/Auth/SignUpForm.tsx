@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import LoadingState from '../Global/LoadingState';
+import Logo from '../Global/Logo';
 import TextField from '../Global/TextField';
 
 // const skills = [
@@ -147,10 +148,7 @@ const SignUpForm = () => {
 
 	return (
 		<div className="flex flex-col w-full max-w-3xl gap-4">
-			<div>
-				<span>dev</span>
-				<span>Codennect</span>
-			</div>
+			<Logo className="text-5xl" />
 			<div className="flex flex-col">
 				<span className="text-2xl ">Registration</span>
 				<span className="text-sm">Fill in all fields.</span>
