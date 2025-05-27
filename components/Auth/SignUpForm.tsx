@@ -25,6 +25,7 @@ import { z } from 'zod';
 import LoadingState from '../Global/LoadingState';
 import Logo from '../Global/Logo';
 import TextField from '../Global/TextField';
+import ProfilePictureSelection from './ProfilePictureSelection';
 
 // const skills = [
 // 	{
@@ -99,6 +100,7 @@ const formSchema = z.object({
 
 const SignUpForm = () => {
 	const { fetchSkills, skills } = useAuthStore();
+	const [image, setImage] = useState<File | null>(null);
 	useEffect(() => {
 		fetchSkills();
 	}, []);
@@ -157,6 +159,7 @@ const SignUpForm = () => {
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4  ">
 					<div className="grid grid-cols-2 gap-10">
 						<div className="flex flex-col gap-4">
+							<ProfilePictureSelection image={image} setImage={setImage} />
 							<TextField
 								placeholder="Enter your Fullname"
 								label="Fullname"
