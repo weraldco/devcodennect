@@ -19,12 +19,15 @@ import { API_PATHS } from '@/utils/apiPaths';
 import axiosInstance from '@/utils/axiosInstance';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import LoadingState from '../Global/LoadingState';
 import Logo from '../Global/Logo';
 import TextField from '../Global/TextField';
+import AuthButton from './AuthButton';
+import { AuthSignLink } from './AuthSignLink';
 import ProfilePictureSelection from './ProfilePictureSelection';
 
 // const skills = [
@@ -81,6 +84,7 @@ import ProfilePictureSelection from './ProfilePictureSelection';
 const formSchema = z.object({
 	fullName: z.string().min(2).max(50),
 	username: z.string().min(8).max(50),
+	imgUrl: z.any(),
 	email: z.string().min(2).max(50),
 	password: z.string().min(2).max(50),
 	repeatPassword: z.string().min(2).max(50),
@@ -99,8 +103,10 @@ const formSchema = z.object({
 });
 
 const SignUpForm = () => {
+	const router = useRouter();
 	const { fetchSkills, skills } = useAuthStore();
 	const [image, setImage] = useState<File | null>(null);
+	console.log('image', image);
 	useEffect(() => {
 		fetchSkills();
 	}, []);
@@ -117,6 +123,7 @@ const SignUpForm = () => {
 			password: '',
 			repeatPassword: '',
 			about: '',
+			imgUrl: '',
 			skills: [],
 			job: {
 				name: '',
@@ -129,14 +136,20 @@ const SignUpForm = () => {
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		setLoading(true);
 		setError(null);
-		if (values.password !== values.repeatPassword) {
-			setError("Password didn't match!");
-			setLoading(false);
-		}
 
 		try {
+			if (values.password !== values.repeatPassword) {
+				setError("Password didn't match!");
+				setLoading(false);
+			}
+			// function for image upload  to cloudinary
+			// when it success then process to axiosIntance.
+			values.imgUrl =
+				'https://res.cloudinary.com/dovviqnop/image/upload/v1747605595/pbq8eoyfgvssjcyeestb.png';
 			const response = await axiosInstance.post(API_PATHS.AUTH.SIGNUP, values);
+
 			setLoading(false);
+			router.push('/auth/signin');
 		} catch (error: any) {
 			if (error.response && error.response.data.message) {
 				setLoading(false);
@@ -308,22 +321,11 @@ const SignUpForm = () => {
 						</div>
 					</div>
 					<div className=" w-full">
-						<Button type="submit" className="w-full ">
-							{loading ? <LoadingState></LoadingState> : 'SIGN-UP'}
-						</Button>
+						<AuthButton loading={loading} />
 					</div>
 				</form>
 			</Form>
-			<span>
-				Already registered?{' '}
-				<Link
-					href="/auth/signin"
-					className="text-teal-400 hover:opacity-70 duration-200"
-				>
-					Click here
-				</Link>{' '}
-				to sign-in
-			</span>
+			<AuthSignLink url="/auth/signin" label="Already registered? " />
 			{error && <span className="text-red-400">{error}</span>}
 		</div>
 	);

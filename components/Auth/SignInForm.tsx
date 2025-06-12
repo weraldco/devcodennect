@@ -14,6 +14,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
 import Logo from '../Global/Logo';
 import TextField from '../Global/TextField';
+import { AuthSignLink, SignupLink } from './AuthSignLink';
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50),
@@ -62,6 +63,7 @@ const SignInForm = () => {
 			}
 		}
 	};
+
 	return (
 		<div className="flex flex-col w-full  max-w-md gap-4">
 			<Logo className="text-4xl  text-center py-5" />
@@ -102,16 +104,7 @@ const SignInForm = () => {
 					</Button>
 				</form>
 			</Form>
-			<span>
-				Not yet registered?{' '}
-				<Link
-					href="/auth/signup"
-					className="text-teal-400 hover:opacity-70 duration-200"
-				>
-					Click here
-				</Link>{' '}
-				to sign-up
-			</span>
+			<AuthSignLink url="/auth/signup" label="Not yet registered? " />
 			{error && <span className="text-red-400">{error}</span>}
 		</div>
 	);

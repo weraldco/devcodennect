@@ -18,11 +18,7 @@ const DevelopersProfile: FC<Props> = () => {
 
 			<div className=" flex h-screen w-full items-center justify-center ">
 				<div className="w-full h-screen flex  justify-center ">
-					{!user ? (
-						<LoadingState label="Profile Information.." />
-					) : (
-						<DevelopersInfo user={user} />
-					)}
+					<DevelopersInfo />
 				</div>
 			</div>
 		</div>

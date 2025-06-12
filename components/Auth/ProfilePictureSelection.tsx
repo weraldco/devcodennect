@@ -19,9 +19,10 @@ const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [preview, setPreview] = useState<string>('');
 
-	const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
+	const handleImageChange = async (e: any) => {
+		const file = e.target.files[0];
 		if (!file) return;
+
 		const compressedFile = await imageCompression(file, {
 			maxSizeMB: 1,
 			maxWidthOrHeight: 800,
@@ -32,6 +33,14 @@ const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 			setImage(compressedFile);
 			const preview = URL.createObjectURL(compressedFile);
 			setPreview(preview);
+		}
+	};
+
+	const handleRemoveImage = () => {
+		setImage(null);
+		setPreview('');
+		if (inputRef.current) {
+			inputRef.current.value = '';
 		}
 	};
 
@@ -49,23 +58,34 @@ const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 				onChange={handleImageChange}
 				className="hidden"
 			/>
-			{!image ? (
+			{image == null ? (
 				<div className=" bg-teal-100 p-5 rounded-full text-teal-500 relative duration-200 ">
 					<FiUser size={40} />
-					<div
+					<button
+						type="button"
 						className="absolute -right-1 -bottom-1 bg-teal-500 text-teal-100 p-2  rounded-full hover:bg-teal-400 duration-200 cursor-pointer active:bg-teal-400/70"
 						onClick={onChooseFile}
 					>
 						<FiUpload />
-					</div>
+					</button>
 				</div>
 			) : (
 				<div>
-					<div className="w-20 h-20 relative">
-						<Image height={400} width={400} src={preview} alt={preview}></Image>
-						<div className="absolute -right-1 -bottom-1 bg-red-500 text-red-100 p-2  rounded-full hover:bg-red-400 duration-200 cursor-pointer active:bg-red-400/70">
+					<div className="w-20 h-20 relative ">
+						<Image
+							height={200}
+							width={200}
+							src={preview}
+							className="rounded-full object-cover bg-red-50"
+							alt={preview}
+						></Image>
+						<button
+							type="button"
+							className="absolute -right-1 -bottom-1 bg-red-500 text-red-100 p-2  rounded-full hover:bg-red-400 duration-200 cursor-pointer active:bg-red-400/70"
+							onClick={handleRemoveImage}
+						>
 							<FiTrash />
-						</div>
+						</button>
 					</div>
 				</div>
 			)}

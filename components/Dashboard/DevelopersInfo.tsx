@@ -3,18 +3,18 @@ import Image from 'next/image';
 import { FC } from 'react';
 import { MdOutlineEdit } from 'react-icons/md';
 
+import { useAuthStore } from '@/store/authStore';
+import LoadingState from '../Global/LoadingState';
 import SkillIcon from '../Global/SkillIcon';
 import JobSection from './JobSection';
 import SectionContainer from './SectionContainer';
-interface Props {
-	user: UserType;
-}
 
-const DevelopersInfo: FC<Props> = ({ user }) => {
-	console.log(user);
+const DevelopersInfo = () => {
+	const { user } = useAuthStore();
+	if (!user) return <LoadingState label="Profile Information.." />;
 
 	return (
-		<div className=" w-full max-w-3xl gap-4 flex flex-col">
+		<div className=" w-full max-w-3xl gap-4 flex flex-col	">
 			<div className="flex   justify-between gap-4">
 				<div>
 					<div className="w-32 h-32 bg-red-50 flex items-center justify-center rounded-full">
