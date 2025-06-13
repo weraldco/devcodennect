@@ -1,6 +1,3 @@
-import { API_PATHS } from '@/utils/apiPaths';
-import axiosInstance from '@/utils/axiosInstance';
-// import { uploadImage } from '@/utils/helper';
 import imageCompression from 'browser-image-compression';
 import Image from 'next/image';
 import {
@@ -23,36 +20,19 @@ const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 	const [preview, setPreview] = useState<string>('');
 
 	const handleImageChange = async (e: any) => {
-		const file = e.target.files?.[0];
+		const file = e.target.files[0];
 		if (!file) return;
+		console.log('file', file);
+		const compressedFile = await imageCompression(file, {
+			maxSizeMB: 1,
+			maxWidthOrHeight: 800,
+			useWebWorker: true,
+		});
 
-		const formData = new FormData();
-		formData.append('image', file);
-
-		try {
-			const response = await axiosInstance.post(
-				API_PATHS.AUTH.UPLOAD_IMAGE,
-				formData,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data',
-					},
-				}
-			);
-			console.log(response);
-
-			const compressedFile = await imageCompression(file, {
-				maxSizeMB: 1,
-				maxWidthOrHeight: 800,
-				useWebWorker: true,
-			});
-
-			setImage(file);
+		if (compressedFile) {
+			setImage(compressedFile);
 			const preview = URL.createObjectURL(compressedFile);
-			console.log('prev', preview);
 			setPreview(preview);
-		} catch (error) {
-			console.error('uploading image error');
 		}
 	};
 

@@ -106,6 +106,7 @@ const SignUpForm = () => {
 	const router = useRouter();
 	const { fetchSkills, skills } = useAuthStore();
 	const [image, setImage] = useState<File | null>(null);
+	console.log('image', image);
 	useEffect(() => {
 		fetchSkills();
 	}, []);

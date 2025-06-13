@@ -8,6 +8,7 @@ export const API_PATHS = {
 		GETUSERINFO: `${API_ROOT}/auth/getUser`,
 		ADDNEWSKILL: `${API_ROOT}/auth/addSkill`,
 		GETSKILLS: `${API_ROOT}/auth/getSkills`,
+		UPLOAD_IMAGE: `${API_ROOT}/auth/upload-image`,
 	},
 	USER: {
 		GETUSER: (userId: number) => `${API_ROOT}/user/getUser/${userId}`,

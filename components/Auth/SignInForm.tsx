@@ -14,7 +14,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { z } from 'zod';
 import Logo from '../Global/Logo';
 import TextField from '../Global/TextField';
-import { AuthSignLink, SignupLink } from './AuthSignLink';
+import { AuthSignLink } from './AuthSignLink';
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50),
