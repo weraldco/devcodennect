@@ -10,6 +10,7 @@ const Dashboard = () => {
 	const { user } = useAuthStore();
 
 	if (!user) return <LoadingState />;
+	console.log(user);
 
 	return (
 		<div className="w-full relative">

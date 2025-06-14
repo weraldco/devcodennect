@@ -11,8 +11,9 @@ import SectionContainer from './SectionContainer';
 
 const DevelopersInfo = () => {
 	const { user } = useAuthStore();
-	if (!user) return <LoadingState label="Profile Information.." />;
-
+	if (!user || !user?.skills)
+		return <LoadingState label="Profile Information.." />;
+	console.log(user);
 	return (
 		<div className=" w-full max-w-3xl gap-4 flex flex-col	">
 			<div className="flex   justify-between gap-4">
@@ -45,21 +46,23 @@ const DevelopersInfo = () => {
 			<SectionContainer>
 				<JobSection job={user.job} />
 			</SectionContainer>
-			<SectionContainer className="gap-2 flex flex-col">
-				<span className="font-bold"> Skills</span>
-				<div className="flex gap-4">
-					{user.skills.map((skill) => (
-						<div key={skill.id}>
-							<div className="flex flex-col items-center gap-2">
-								<div className="bg-neutral-700 text-white p-3 rounded-full flex items-center justify-center">
-									<SkillIcon id={skill.id} />
+			{user.skills && (
+				<SectionContainer className="gap-2 flex flex-col">
+					<span className="font-bold"> Skills</span>
+					<div className="flex gap-4">
+						{user.skills.map((skill) => (
+							<div key={skill.id}>
+								<div className="flex flex-col items-center gap-2">
+									<div className="bg-neutral-700 text-white p-3 rounded-full flex items-center justify-center">
+										<SkillIcon id={skill.id} />
+									</div>
+									<span className="text-sm">{skill.skillName}</span>
 								</div>
-								<span className="text-sm">{skill.skillName}</span>
 							</div>
-						</div>
-					))}
-				</div>
-			</SectionContainer>
+						))}
+					</div>
+				</SectionContainer>
+			)}
 		</div>
 	);
 };
