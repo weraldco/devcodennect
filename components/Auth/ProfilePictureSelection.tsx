@@ -12,17 +12,20 @@ import {
 	useState,
 } from 'react';
 import { FiTrash, FiUpload, FiUser } from 'react-icons/fi';
+import { LuLoaderCircle } from 'react-icons/lu';
 
 interface Props {
-	image: File | null;
-	setImage: Dispatch<SetStateAction<File | null>>;
+	image: string | null;
+	setImage: Dispatch<SetStateAction<string | null>>;
 }
 
 const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
+	const [loading, setLoading] = useState(false);
 	const [preview, setPreview] = useState<string>('');
 
 	const handleImageChange = async (e: any) => {
+		setLoading(true);
 		const file = e.target.files?.[0];
 		if (!file) return;
 
@@ -39,7 +42,6 @@ const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 					},
 				}
 			);
-			console.log(response);
 
 			const compressedFile = await imageCompression(file, {
 				maxSizeMB: 1,
@@ -47,11 +49,12 @@ const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 				useWebWorker: true,
 			});
 
-			setImage(file);
+			setImage(response.data.optimizeUrl);
 			const preview = URL.createObjectURL(compressedFile);
-			console.log('prev', preview);
 			setPreview(preview);
+			setLoading(false);
 		} catch (error) {
+			setLoading(false);
 			console.error('uploading image error');
 		}
 	};
@@ -80,7 +83,15 @@ const ProfilePictureSelection: FC<Props> = ({ image, setImage }) => {
 			/>
 			{image == null ? (
 				<div className=" bg-teal-100 p-5 rounded-full text-teal-500 relative duration-200 ">
-					<FiUser size={40} />
+					{loading ? (
+						<div className="flex flex-col items-center">
+							<div className="animate-spin">
+								<LuLoaderCircle size={40} />
+							</div>{' '}
+						</div>
+					) : (
+						<FiUser size={40} />
+					)}
 					<button
 						type="button"
 						className="absolute -right-1 -bottom-1 bg-teal-500 text-teal-100 p-2  rounded-full hover:bg-teal-400 duration-200 cursor-pointer active:bg-teal-400/70"

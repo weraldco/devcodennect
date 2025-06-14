@@ -105,7 +105,7 @@ const formSchema = z.object({
 const SignUpForm = () => {
 	const router = useRouter();
 	const { fetchSkills, skills } = useAuthStore();
-	const [image, setImage] = useState<File | null>(null);
+	const [image, setImage] = useState<string | null>(null);
 	useEffect(() => {
 		fetchSkills();
 	}, []);
@@ -135,29 +135,27 @@ const SignUpForm = () => {
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		setLoading(true);
 		setError(null);
+		try {
+			if (values.password !== values.repeatPassword) {
+				setError("Password didn't match!");
+				setLoading(false);
+			}
+			// function for image upload  to cloudinary
+			// when it success then process to axiosIntance.
+			values.imgUrl = image;
+			const response = await axiosInstance.post(API_PATHS.AUTH.SIGNUP, values);
 
-		// try {
-		// 	if (values.password !== values.repeatPassword) {
-		// 		setError("Password didn't match!");
-		// 		setLoading(false);
-		// 	}
-		// 	// function for image upload  to cloudinary
-		// 	// when it success then process to axiosIntance.
-		// 	values.imgUrl =
-		// 		'https://res.cloudinary.com/dovviqnop/image/upload/v1747605595/pbq8eoyfgvssjcyeestb.png';
-		// 	const response = await axiosInstance.post(API_PATHS.AUTH.SIGNUP, values);
-
-		// 	setLoading(false);
-		// 	router.push('/auth/signin');
-		// } catch (error: any) {
-		// 	if (error.response && error.response.data.message) {
-		// 		setLoading(false);
-		// 		setError(error.response.data.message);
-		// 	} else {
-		// 		setLoading(false);
-		// 		setError('Something went wrong, try again later.');
-		// 	}
-		// }
+			setLoading(false);
+			router.push('/auth/signin');
+		} catch (error: any) {
+			if (error.response && error.response.data.message) {
+				setLoading(false);
+				setError(error.response.data.message);
+			} else {
+				setLoading(false);
+				setError('Something went wrong, try again later.');
+			}
+		}
 	}
 
 	return (
